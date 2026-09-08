@@ -2,7 +2,7 @@
 // Bei Änderungen an index.html/manifest/Icons bitte CACHE_VERSION erhöhen,
 // sonst liefern Nutzer:innen weiterhin die alte, gecachte Version aus.
 
-const CACHE_VERSION = 'status-fenster-v75';
+const CACHE_VERSION = 'status-fenster-v76';
 const APP_SHELL = [
   './',
   './index.html',
