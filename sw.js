@@ -2,7 +2,7 @@
 // Bei Änderungen an index.html/manifest/Icons bitte CACHE_VERSION erhöhen,
 // sonst liefern Nutzer:innen weiterhin die alte, gecachte Version aus.
 
-const CACHE_VERSION = 'status-fenster-v133';
+const CACHE_VERSION = 'status-fenster-v144';
 const APP_SHELL = [
   './',
   './index.html',
@@ -53,8 +53,10 @@ self.addEventListener('fetch', (event) => {
       caches.match(req).then((cached) => {
         if(cached) return cached;
         return fetch(req).then((res) => {
-          const copy = res.clone();
-          caches.open(CACHE_VERSION).then((cache) => cache.put(req, copy));
+          if(res.ok){
+            const copy = res.clone();
+            caches.open(CACHE_VERSION).then((cache) => cache.put(req, copy));
+          }
           return res;
         }).catch(() => caches.match('./index.html'));
       })
@@ -67,8 +69,10 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       caches.match(req).then((cached) => {
         const networkFetch = fetch(req).then((res) => {
-          const copy = res.clone();
-          caches.open(CACHE_VERSION).then((cache) => cache.put(req, copy));
+          if(res.ok){
+            const copy = res.clone();
+            caches.open(CACHE_VERSION).then((cache) => cache.put(req, copy));
+          }
           return res;
         }).catch(() => cached);
         return cached || networkFetch;
