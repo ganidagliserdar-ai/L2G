@@ -2,7 +2,7 @@
 // Bei Änderungen an index.html/manifest/Icons bitte CACHE_VERSION erhöhen,
 // sonst liefern Nutzer:innen weiterhin die alte, gecachte Version aus.
 
-const CACHE_VERSION = 'status-fenster-v144';
+const CACHE_VERSION = 'status-fenster-v145';
 const APP_SHELL = [
   './',
   './index.html',
@@ -21,7 +21,10 @@ self.addEventListener('install', (event) => {
         // komplette Installation stillschweigend scheitern. Einzeln cachen, damit
         // die App auch dann funktionsfähig bleibt, wenn ein Asset fehlt.
         return Promise.all(APP_SHELL.map((url) =>
-          cache.add(url).catch((err) => {
+          // v145: Ausdrücklich frisch vom Server laden. Ein einfaches cache.add(url) darf
+          // den Browser-Zwischenspeicher nutzen (GitHub Pages: bis zu 10 Minuten) und
+          // nahm so nach einem Upload die ALTE index.html in den neuen Cache auf.
+          cache.add(new Request(url, { cache: 'reload' })).catch((err) => {
             console.warn('[SW] Asset konnte nicht gecacht werden:', url, err);
           })
         ));
